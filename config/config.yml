@@ -1,0 +1,102 @@
+name: torc-scheduler
+nodes:
+    - name: wedge
+      ip: $MASTER_IP
+      external_ip: $MASTER_IP
+      type: master
+    - name: bladerunner1
+      ip: 10.250.3.21
+      external_ip: 10.250.3.21
+      type: slave
+    - name: bladerunner2
+      ip: 10.250.3.22
+      external_ip: 10.250.3.22
+      type: slave
+    - name: bladerunner3
+      ip: 10.250.3.23
+      external_ip: 10.250.3.23
+      type: slave
+    - name: bladerunner4
+      ip: 10.250.3.24
+      external_ip: 10.250.3.24
+      type: slave
+dns-addons:
+    - name: etcd
+      ip: $MASTER_IP
+    - name: network-agent
+      ip: $MASTER_IP    
+    - name: mesos-master
+      ip: $MASTER_IP
+network-agent:
+    type: snaproute
+    connection: $MASTER_IP:8080    
+statesync:
+    poll_interval_in_seconds: 10
+stateclean:
+    poll_interval_in_seconds: 18
+    timeout_in_seconds: 30
+    restart_delay_in_seconds: 30
+healthcheck:
+    poll_interval_in_seconds: 12 
+    system_services:
+        - name: dns
+          image_name: dns
+          arguments: -bind=$MASTER_IP
+          node_function: controller
+          network_type: host
+        - name: vector
+          image_name: vector
+          arguments: -p 9091
+          node_function: controller
+          network_type: host
+        - name: pcp
+          image_name: attinnovate/charmander-pcp
+          privileged: true
+          sla: singleton_each_node
+          volumes:
+            - host_path: /sys
+              container_path: /sys
+              read_only_mode: true
+            - host_path: /etc/localtime
+              container_path: /etc/localtime
+              read_only_mode: true
+            - host_path: /var/lib/docker
+              container_path: /var/lib/docker
+              read_only_mode: true
+            - host_path: /run
+              container_path: /run
+              read_only_mode: false
+            - host_path: /var/log
+              container_path: /var/log
+              read_only_mode: false
+            - host_path: /dev/log
+              container_path: /dev/log
+              read_only_mode: false
+          parameters: --ipc=host
+          network_type: host
+        - name: influxdb
+          image_name: influxdb
+          memory: 1024.0
+          node_name: bladerunner3
+          network_type: host
+        - name: datacollector
+          image_name: datacollector
+          memory: 40.0
+          arguments: -influxdb_name=torc
+          node_name: bladerunner3
+          network_type: host
+        - name: statesync
+          image_name: statesync
+          node_function: controller
+          arguments: --etcd http://$MASTER_IP:2379/v2/keys/ --basedir torc --agenttype snaproute --agenturl $MASTER_IP:8080 --service http://$MASTER_IP:3000/services/running --machine http://$MASTER_IP:3000/nodes
+          network_type: host
+api:
+    service-groups:
+        - name: torc-dns-scheduler
+          services:
+            - name: torc-dns-scheduler
+              image_name: torc-dns-scheduler
+              node_name: bladerunner3
+              memory: 1024.0
+              arguments: --master $MASTER_IP --config config.yml
+              network_type: host

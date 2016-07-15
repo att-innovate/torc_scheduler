@@ -1,0 +1,61 @@
+name: torc-scheduler
+nodes:
+    - name: wedge
+      ip: $MASTER_IP
+      type: master
+dns-addons:
+    - name: etcd
+      ip: $MASTER_IP
+    - name: network-agent
+      ip: $MASTER_IP    
+    - name: mesos-master
+      ip: $MASTER_IP
+network-agent:
+    type: snaproute
+    connection: $MASTER_IP:8080    
+statesync:
+    poll_interval_in_seconds: 10
+stateclean:
+    poll_interval_in_seconds: 18
+    timeout_in_seconds: 30
+    restart_delay_in_seconds: 30
+healthcheck:
+    poll_interval_in_seconds: 12 
+    system_services:
+        - name: dns
+          image_name: dns
+          arguments: -bind=$MASTER_IP
+          node_function: controller
+          network_type: host
+        - name: vector
+          image_name: vector
+          arguments: -p 9091
+          node_function: controller
+          network_type: host
+        - name: pcp
+          image_name: attinnovate/charmander-pcp
+          privileged: true
+          sla: singleton_each_node
+          volumes:
+            - host_path: /sys
+              container_path: /sys
+              read_only_mode: true
+            - host_path: /etc/localtime
+              container_path: /etc/localtime
+              read_only_mode: true
+            - host_path: /var/lib/docker
+              container_path: /var/lib/docker
+              read_only_mode: true
+            - host_path: /run
+              container_path: /run
+              read_only_mode: false
+            - host_path: /var/log
+              container_path: /var/log
+              read_only_mode: false
+            - host_path: /dev/log
+              container_path: /dev/log
+              read_only_mode: false
+          parameters: --ipc=host
+          network_type: host
+api:
+    service-groups:
