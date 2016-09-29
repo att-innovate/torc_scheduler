@@ -62,9 +62,8 @@ impl StateManager {
         let config = StateManager::read_config_file(config_file);
         let my_name = config["name"].as_str().unwrap_or("torc-controller").to_string();
         let ipmi_proxy = config["ipmiproxy"].as_str().unwrap_or("undefined").to_string();
-        let network_agent_type = config["network-agent"]["type"].as_str().unwrap_or("fboss").to_string();
-        let mut network_agent_connection =
-            config["network-agent"]["connection"].as_str().unwrap_or(&format!("{}:5909", master_ip.clone())).to_string();
+        let network_agent_type = config["network-agent"]["type"].as_str().unwrap_or("undefined").to_string();
+        let mut network_agent_connection = config["network-agent"]["connection"].as_str().unwrap_or("undefined").to_string();
         network_agent_connection = str::replace(&network_agent_connection, "$MASTER_IP", &master_ip);
 
         let statemanager = StateManager {

@@ -1,0 +1,25 @@
+name: torc-scheduler
+nodes:
+    - name: wedge
+      ip: $MASTER_IP
+      type: master
+dns-addons:
+    - name: test-entry
+      ip: $MASTER_IP
+network-agent:
+statesync:
+    poll_interval_in_seconds: 10
+stateclean:
+    poll_interval_in_seconds: 18
+    timeout_in_seconds: 30
+    restart_delay_in_seconds: 30
+healthcheck:
+    poll_interval_in_seconds: 12 
+    system_services:
+        - name: vector
+          image_name: vector
+          arguments: -p 9092
+          node_function: controller
+          network_type: host
+api:
+    service-groups:

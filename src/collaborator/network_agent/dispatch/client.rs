@@ -28,6 +28,7 @@ pub fn reset_fib(agent_type: &String, connection: &String) {
     match agent_type.as_str() {
         "fboss" => fboss::reset_fib(&connection),
         "snaproute" => snaproute::reset_fib(&connection),
+        "undefined" => println!("network-agent undefined"),
         _ => println!("!! network-agent type {} unknown!!", agent_type),
     }
 }
