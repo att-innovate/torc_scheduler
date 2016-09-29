@@ -13,7 +13,7 @@ version = "*"
 
 [dependencies.torc_snaproute_client]
 git = "https://github.com/att-innovate/torc_snaproute_client.git"
-version = "*"
+version = "0.2.0"
 
 [dependencies.protobuf]
 version = "1.0.18"
