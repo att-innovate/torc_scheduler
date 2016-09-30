@@ -20,9 +20,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+pub use self::node_list::Node;
 pub use self::state::{StateManager, TaskState};
 pub use self::task_list::{SLA, Task, Volume};
-pub use self::node_list::Node;
 
 mod state;
 mod task_list;

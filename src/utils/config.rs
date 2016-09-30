@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-use yaml_rust::yaml::Yaml;
 use state::{SLA, StateManager, Volume};
+use yaml_rust::yaml::Yaml;
 
 #[derive(Clone, Debug)]
 pub struct Task {

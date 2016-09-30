@@ -20,11 +20,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-pub use self::consul::{register_running_task, register_torc_controller, register_unmanaged_service};
 pub use self::calico::{configure_network, shutdown_network};
+pub use self::consul::{register_running_task, register_torc_controller, register_unmanaged_service};
+pub use self::ipmi::{shutdown_node, startup_node};
 pub use self::mesos::{kill_task, set_mesos_client};
 pub use self::network_agent::{add_route, delete_route, reset_fib};
-pub use self::ipmi::{shutdown_node, startup_node};
 
 mod consul;
 mod calico;

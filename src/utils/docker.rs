@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-use state::StateManager;
 use rustc_serialize::json::Json;
+use state::StateManager;
 
 pub fn handle_inspect_data(state_manager: &StateManager, task_name: &String, inspect_data: &String, slave_id: &String) {
     // println!("{}", inspect_data);
@@ -32,7 +32,7 @@ pub fn handle_inspect_data(state_manager: &StateManager, task_name: &String, ins
     let node_name = json.as_array().unwrap()[0].find_path(&["Config", "Hostname"]).unwrap().as_string().unwrap();
     let mut new_ip = match json.as_array().unwrap()[0].find_path(&["NetworkSettings", "Networks", "torc", "IPAddress"]) {
         None => "".to_string(),
-        Some(ip) => ip.as_string().unwrap().to_string(),   
+        Some(ip) => ip.as_string().unwrap().to_string(),
     };
 
     if new_ip.len() == 0 {

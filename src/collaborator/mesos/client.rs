@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-use mesos::proto::TaskID;
 use mesos::SchedulerClient;
+use mesos::proto::TaskID;
 use std::sync::{Arc, Mutex};
 
 

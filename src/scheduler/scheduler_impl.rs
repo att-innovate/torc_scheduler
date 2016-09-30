@@ -22,16 +22,16 @@
 
 #![allow(unused_variables)]
 
+use collaborator::set_mesos_client;
 use mesos::{Scheduler, SchedulerClient};
 use mesos::proto::{CommandInfo, ContainerInfo, ContainerInfo_DockerInfo, ContainerInfo_DockerInfo_Network, ContainerInfo_Type,
                    ExecutorID, FrameworkID, InverseOffer, Offer, OfferID, Parameter, SlaveID, TaskInfo, TaskStatus, Volume,
                    Volume_Mode};
-use protobuf;
 use mesos::proto::TaskState as MesosTaskState;
 use mesos::util;
+use protobuf;
 use state::{StateManager, TaskState};
 use utils;
-use collaborator::set_mesos_client;
 
 
 pub struct TorcScheduler<'lifetime> {
@@ -52,8 +52,8 @@ impl<'lifetime> Scheduler for TorcScheduler<'lifetime> {
 
         // this never lets go willingly
         let offer_ids = inverse_offers.iter()
-                                      .map(|o| o.get_id().clone())
-                                      .collect();
+            .map(|o| o.get_id().clone())
+            .collect();
         client.decline(offer_ids, None).unwrap();
     }
 
@@ -150,9 +150,9 @@ impl<'lifetime> Scheduler for TorcScheduler<'lifetime> {
 
                 if task.arguments.len() > 0 {
                     let elmts: Vec<&str> = task.arguments
-                                               .split(|c: char| c == ' ')
-                                               .filter(|s| !s.is_empty())
-                                               .collect();
+                        .split(|c: char| c == ' ')
+                        .filter(|s| !s.is_empty())
+                        .collect();
 
                     let mut arguments: Vec<String> = vec![];
 
@@ -181,9 +181,9 @@ impl<'lifetime> Scheduler for TorcScheduler<'lifetime> {
 
                 if task.parameters.len() > 0 {
                     let elmts: Vec<&str> = task.parameters
-                                               .split(|c: char| c == '-' || c == '=' || c == ' ')
-                                               .filter(|s| !s.is_empty())
-                                               .collect();
+                        .split(|c: char| c == '-' || c == '=' || c == ' ')
+                        .filter(|s| !s.is_empty())
+                        .collect();
 
                     let mut count = 0;
                     let mut parameters: Vec<Parameter> = vec![];
@@ -285,7 +285,7 @@ impl<'lifetime> Scheduler for TorcScheduler<'lifetime> {
                 } else {
                     self.state_manager.send_remove_task_by_name(task_name);
                 }
-            }            
+            }
             _ => {}
         }
     }

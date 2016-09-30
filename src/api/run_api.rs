@@ -20,17 +20,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-use state::{StateManager, Task};
 use collaborator::{configure_network, shutdown_network, shutdown_node, startup_node};
+use hyper::header::AccessControlAllowOrigin;
 use iron::{Iron, IronResult, Request, Response};
 use iron::mime::{Mime, SubLevel, TopLevel};
-use hyper::header::AccessControlAllowOrigin;
 use iron::status;
 use router::Router;
-use std::sync::Mutex;
 use rustc_serialize::json;
-use utils::read_task;
+use state::{StateManager, Task};
 use std::io::Read;
+use std::sync::Mutex;
+use utils::read_task;
 
 pub fn run_api(state_manager: &StateManager) {
     println!("api starting");

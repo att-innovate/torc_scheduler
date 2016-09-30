@@ -20,10 +20,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-use state::Node;
 use hyper::Client;
 use hyper::status::StatusCode;
 use rustc_serialize::json;
+use state::Node;
 use std::io::Read;
 
 const DEFAULT_PORT: i16 = 8085;

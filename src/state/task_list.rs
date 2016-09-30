@@ -20,10 +20,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-use super::state::TaskState;
+use chrono::UTC;
 use std::collections::HashMap;
 use std::sync::Mutex;
-use chrono::UTC;
+use super::state::TaskState;
 
 pub struct TaskList {
     task_list: Mutex<HashMap<String, Task>>,

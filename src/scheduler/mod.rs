@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-pub use self::scheduler_impl::TorcScheduler;
 pub use self::run_scheduler::run_scheduler;
+pub use self::scheduler_impl::TorcScheduler;
 
 mod scheduler_impl;
 mod run_scheduler;

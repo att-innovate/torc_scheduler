@@ -20,9 +20,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
+use chrono::UTC;
 use std::collections::HashMap;
 use std::sync::Mutex;
-use chrono::UTC;
 
 pub struct NodeList {
     node_list: Mutex<HashMap<String, Node>>,

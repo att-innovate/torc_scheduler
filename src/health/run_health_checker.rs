@@ -20,11 +20,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-use std::time::Duration;
-use std::thread;
-use state::{SLA, StateManager, TaskState};
-use utils::{read_string, read_string_replace_variable, read_task};
 use collaborator::{register_torc_controller, register_unmanaged_service};
+use state::{SLA, StateManager, TaskState};
+use std::thread;
+use std::time::Duration;
+use utils::{read_string, read_string_replace_variable, read_task};
 
 struct DNSEntry {
     name: String,

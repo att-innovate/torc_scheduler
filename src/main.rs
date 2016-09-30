@@ -25,36 +25,36 @@ extern crate torc_scheduler;
 #[macro_use]
 extern crate clap;
 
+use clap::{App, Arg};
 use std::thread;
-use torc_scheduler::state::StateManager;
-use torc_scheduler::scheduler::run_scheduler;
 use torc_scheduler::api::run_api;
 use torc_scheduler::health::run_health_checker;
-use clap::{App, Arg};
+use torc_scheduler::scheduler::run_scheduler;
+use torc_scheduler::state::StateManager;
 
 fn main() {
     let matches = App::new("ToRC Scheduler")
-                      .about("Orchestrates core services on Facebook Wedge")
-                      .version(&crate_version!()[..])
-                      .arg(Arg::with_name("MASTER_IP")
-                               .short("m")
-                               .long("master")
-                               .required(true)
-                               .help("IP of master node")
-                               .takes_value(true))
-                      .arg(Arg::with_name("MY_IP")
-                               .short("i")
-                               .long("myip")
-                               .required(false)
-                               .help("IP of controller")
-                               .takes_value(true))
-                      .arg(Arg::with_name("CONFIG")
-                               .short("c")
-                               .long("config")
-                               .required(false)
-                               .help("Path to configuration file")
-                               .takes_value(true))
-                      .get_matches();
+        .about("Orchestrates core services on Facebook Wedge")
+        .version(&crate_version!()[..])
+        .arg(Arg::with_name("MASTER_IP")
+            .short("m")
+            .long("master")
+            .required(true)
+            .help("IP of master node")
+            .takes_value(true))
+        .arg(Arg::with_name("MY_IP")
+            .short("i")
+            .long("myip")
+            .required(false)
+            .help("IP of controller")
+            .takes_value(true))
+        .arg(Arg::with_name("CONFIG")
+            .short("c")
+            .long("config")
+            .required(false)
+            .help("Path to configuration file")
+            .takes_value(true))
+        .get_matches();
 
     let master_ip = matches.value_of("MASTER_IP").unwrap();
     println!("Connecting to Master at: {}", master_ip);
@@ -76,19 +76,19 @@ fn main() {
 
     let api_state_manager = state_manager.clone();
     let _ = thread::Builder::new()
-                .name("api".to_string())
-                .spawn(move || run_api(&api_state_manager));
+        .name("api".to_string())
+        .spawn(move || run_api(&api_state_manager));
 
     let scheduler_state_manager = state_manager.clone();
     let _ = thread::Builder::new()
-                .name("scheduler".to_string())
-                .spawn(move || run_scheduler(&scheduler_state_manager));
+        .name("scheduler".to_string())
+        .spawn(move || run_scheduler(&scheduler_state_manager));
 
     let health_state_manager = state_manager.clone();
     let health_check_runner = thread::Builder::new()
-                                  .name("health".to_string())
-                                  .spawn(move || run_health_checker(&health_state_manager))
-                                  .unwrap();
+        .name("health".to_string())
+        .spawn(move || run_health_checker(&health_state_manager))
+        .unwrap();
 
     // wait forever
     let _ = health_check_runner.join();

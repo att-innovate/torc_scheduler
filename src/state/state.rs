@@ -20,18 +20,18 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-use std::thread;
+use chrono::UTC;
+use collaborator::{add_route, delete_route, kill_task, register_running_task, reset_fib};
 use std::fs::File;
 use std::io::Read;
 use std::sync::mpsc::{Receiver, Sender, channel};
+use std::thread;
 use std::time::Duration;
-use yaml_rust::{Yaml, YamlLoader};
-use collaborator::{add_route, delete_route, kill_task, register_running_task, reset_fib};
-use utils::{read_int, read_string, read_string_replace_variable};
-use super::task_list::{SLA, Task, TaskList, Volume};
 use super::node_list::{Node, NodeList};
+use super::task_list::{SLA, Task, TaskList, Volume};
+use utils::{read_int, read_string, read_string_replace_variable};
 use uuid::Uuid;
-use chrono::UTC;
+use yaml_rust::{Yaml, YamlLoader};
 
 #[derive (Clone)]
 pub struct StateManager {
@@ -512,9 +512,7 @@ struct State {
 }
 
 enum StateRequestMsg {
-    Ping {
-        sender: Sender<StateResponseMsg>,
-    },
+    Ping { sender: Sender<StateResponseMsg> },
     GetTaskState {
         sender: Sender<StateResponseMsg>,
         task_name: String,
@@ -564,15 +562,9 @@ enum StateRequestMsg {
         sender: Sender<StateResponseMsg>,
         task_name: String,
     },
-    GetRequestedTasks {
-        sender: Sender<StateResponseMsg>,
-    },
-    GetRunningTasks {
-        sender: Sender<StateResponseMsg>,
-    },
-    GetRestartTasks {
-        sender: Sender<StateResponseMsg>,
-    },
+    GetRequestedTasks { sender: Sender<StateResponseMsg> },
+    GetRunningTasks { sender: Sender<StateResponseMsg> },
+    GetRestartTasks { sender: Sender<StateResponseMsg> },
     AddNode {
         sender: Sender<StateResponseMsg>,
         node: Node,
@@ -596,22 +588,14 @@ enum StateRequestMsg {
         sender: Sender<StateResponseMsg>,
         node_name: String,
     },
-    GetNodes {
-        sender: Sender<StateResponseMsg>,
-    },
+    GetNodes { sender: Sender<StateResponseMsg> },
 }
 
 enum StateResponseMsg {
     Pong,
-    TaskState {
-        task_state: TaskState,
-    },
-    TaskIP {
-        task_ip: String,
-    },
-    TaskName {
-        task_name: String,
-    },
+    TaskState { task_state: TaskState },
+    TaskIP { task_ip: String },
+    TaskName { task_name: String },
     UpdateTaskState,
     UpdateTaskInfo,
     UpdateTaskNodeName,
@@ -619,30 +603,16 @@ enum StateResponseMsg {
     StartTask,
     RestartTask,
     RemoveTask,
-    GetIsRestartableTask {
-        is_restartable_task: bool,
-    },
-    GetRequestedTasks {
-        requested_tasks: Vec<Task>,
-    },
-    GetRunningTasks {
-        running_tasks: Vec<Task>,
-    },
-    GetRestartTasks {
-        restart_tasks: Vec<Task>,
-    },
+    GetIsRestartableTask { is_restartable_task: bool },
+    GetRequestedTasks { requested_tasks: Vec<Task> },
+    GetRunningTasks { running_tasks: Vec<Task> },
+    GetRestartTasks { restart_tasks: Vec<Task> },
     AddNode,
-    GetIsNodeActive {
-        is_active: bool,
-    },
+    GetIsNodeActive { is_active: bool },
     UpdateNode,
     SetNodeInactive,
-    GetNodes {
-        nodes: Vec<Node>,
-    },
-    GetNode {
-        node: Node,
-    },
+    GetNodes { nodes: Vec<Node> },
+    GetNode { node: Node },
 }
 
 

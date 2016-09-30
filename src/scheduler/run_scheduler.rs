@@ -21,9 +21,9 @@
 // THE SOFTWARE.
 
 use mesos::{ProtobufCallbackRouter, SchedulerConf, run_protobuf_scheduler};
+use mesos::proto::FrameworkID;
 use scheduler::TorcScheduler;
 use state::StateManager;
-use mesos::proto::FrameworkID;
 
 pub fn run_scheduler(state_manager: &StateManager) {
     state_manager.send_ping();
